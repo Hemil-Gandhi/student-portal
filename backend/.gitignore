@@ -1,2 +1,4 @@
 nul
 node_modules/
+
+.vercel
