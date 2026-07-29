@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://student-portal-26a3.vercel.app/api'
+  apiUrl: 'https://backend-weld-delta-37.vercel.app/api'
 };
