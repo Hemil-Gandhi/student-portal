@@ -32,11 +32,10 @@ import { AuthService } from '../../services/auth.service';
             <div class="flex items-center justify-center gap-2 mb-6">
               <div class="flex items-center gap-1">
                 <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold"
-                  [class.bg-gray-900]="step() === 'form'"
-                  [class.dark:bg-white]="step() === 'form'"
-                  [class.text-white]="step() === 'form'"
-                  [class.dark:text-gray-900]="step() === 'form'"
-                  [class.bg-green-500]="step() === 'otp' || step() === 'password'"
+                  [ngClass]="{
+                    'bg-gray-900 dark:bg-white text-white dark:text-gray-900': step() === 'form',
+                    'bg-green-500': step() === 'otp' || step() === 'password'
+                  }"
                 >
                   @if (step() === 'otp' || step() === 'password') {
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -44,18 +43,22 @@ import { AuthService } from '../../services/auth.service';
                     </svg>
                   } @else { 1 }
                 </div>
-                <span class="text-xs font-medium ml-1" [class.text-gray-900]="step() === 'form'" [class.dark:text-white]="step() === 'form'" [class.text-gray-400]="step() !== 'form'">Details</span>
+                <span class="text-xs font-medium ml-1" 
+                  [ngClass]="{
+                    'text-gray-900 dark:text-white': step() === 'form',
+                    'text-gray-400': step() !== 'form'
+                  }">Details</span>
               </div>
-              <div class="w-8 h-0.5 bg-gray-200 dark:bg-gray-700"
-                [class.bg-green-400]="step() === 'otp' || step() === 'password'"></div>
+              <div class="w-8 h-0.5"
+                [ngClass]="(step() === 'otp' || step() === 'password') ? 'bg-green-400' : 'bg-gray-200 dark:bg-gray-700'"></div>
               <div class="flex items-center gap-1">
                 <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold"
-                  [class.bg-gray-900]="step() === 'otp'"
-                  [class.dark:bg-white]="step() === 'otp'"
-                  [class.bg-green-500]="step() === 'password'"
-                  [class.bg-gray-200 dark:bg-gray-700]="step() === 'form'"
-                  [class.text-gray-500 dark:text-gray-400]="step() === 'form'"
-                  [class.text-white dark:text-gray-900]="step() === 'otp' || step() === 'password'"
+                  [ngClass]="{
+                    'bg-gray-900 dark:bg-white': step() === 'otp',
+                    'bg-green-500': step() === 'password',
+                    'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400': step() === 'form',
+                    'text-white dark:text-gray-900': step() === 'otp' || step() === 'password'
+                  }"
                 >
                   @if (step() === 'password') {
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -64,23 +67,26 @@ import { AuthService } from '../../services/auth.service';
                   } @else { 2 }
                 </div>
                 <span class="text-xs font-medium ml-1"
-                  [class.text-gray-900 dark:text-white]="step() === 'otp'"
-                  [class.text-green-600 dark:text-green-400]="step() === 'password'"
-                  [class.text-gray-400 dark:text-gray-500]="step() === 'form'">Verify</span>
+                  [ngClass]="{
+                    'text-gray-900 dark:text-white': step() === 'otp',
+                    'text-green-600 dark:text-green-400': step() === 'password',
+                    'text-gray-400 dark:text-gray-500': step() === 'form'
+                  }">Verify</span>
               </div>
-              <div class="w-8 h-0.5 bg-gray-200 dark:bg-gray-700"
-                [class.bg-green-400]="step() === 'password'"></div>
+              <div class="w-8 h-0.5"
+                [ngClass]="step() === 'password' ? 'bg-green-400' : 'bg-gray-200 dark:bg-gray-700'"></div>
               <div class="flex items-center gap-1">
                 <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold"
-                  [class.bg-gray-900]="step() === 'password'"
-                  [class.dark:bg-white]="step() === 'password'"
-                  [class.bg-gray-200 dark:bg-gray-700]="step() !== 'password'"
-                  [class.text-gray-500 dark:text-gray-400]="step() !== 'password'"
-                  [class.text-white dark:text-gray-900]="step() === 'password'"
+                  [ngClass]="{
+                    'bg-gray-900 dark:bg-white text-white dark:text-gray-900': step() === 'password',
+                    'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400': step() !== 'password'
+                  }"
                 >3</div>
                 <span class="text-xs font-medium ml-1"
-                  [class.text-gray-900 dark:text-white]="step() === 'password'"
-                  [class.text-gray-400 dark:text-gray-500]="step() !== 'password'">Password</span>
+                  [ngClass]="{
+                    'text-gray-900 dark:text-white': step() === 'password',
+                    'text-gray-400 dark:text-gray-500': step() !== 'password'
+                  }">Password</span>
               </div>
             </div>
 

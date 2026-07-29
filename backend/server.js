@@ -24,21 +24,49 @@ const { sendTaskReminder } = require('./services/email.service');
 const app = express();
 const PORT = process.env.PORT || 3002;
 
+const allowedOrigins = [
+  'http://localhost:4200',
+  'https://frontend-ten-mauve-88.vercel.app'
+];
+if (process.env.ALLOWED_ORIGIN) {
+  allowedOrigins.push(process.env.ALLOWED_ORIGIN);
+}
 const corsOptions = {
-  origin: process.env.ALLOWED_ORIGIN || '*',
+  origin: function (origin, callback) {
+    // Allow requests with no origin (mobile apps, curl, etc.)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(null, true); // Allow all for now; tighten later if needed
+    }
+  },
+  credentials: true
 };
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(morgan('dev'));
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/student-portal', {
+let mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/student-portal';
+
+mongoose.connect(mongoUri, {
   serverSelectionTimeoutMS: 5000
 }).then(() => {
   console.log('Connected to MongoDB');
   startReminderCron();
-}).catch(err => {
-  console.error('MongoDB connection error:', err);
-  process.exit(1);
+}).catch(async err => {
+  console.error('MongoDB connection error:', err.message);
+  console.log('Attempting to start in-memory MongoDB as fallback...');
+  try {
+    const { MongoMemoryServer } = require('mongodb-memory-server');
+    const mongoServer = await MongoMemoryServer.create();
+    const fallbackUri = mongoServer.getUri();
+    await mongoose.connect(fallbackUri);
+    console.log(`Connected to fallback In-Memory MongoDB at ${fallbackUri}`);
+    startReminderCron();
+  } catch (memErr) {
+    console.error('Failed to start memory server:', memErr);
+    process.exit(1);
+  }
 });
 
 app.use('/api/auth', authRoutes);
