@@ -55,6 +55,10 @@ mongoose.connect(mongoUri, {
   startReminderCron();
 }).catch(async err => {
   console.error('MongoDB connection error:', err.message);
+  if (process.env.NODE_ENV === 'production') {
+    console.error('In production, cannot use MongoMemoryServer fallback. Crashing.');
+    process.exit(1);
+  }
   console.log('Attempting to start in-memory MongoDB as fallback...');
   try {
     const { MongoMemoryServer } = require('mongodb-memory-server');
